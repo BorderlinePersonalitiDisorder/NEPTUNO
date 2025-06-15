@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<script src="../polyfill/accessible-component.js"></script>
+
+<accessible-component role="tabs" aria-label="Perfil de usuario">
+  <div role="tablist">
+    <button role="tab" aria-selected="true">Información</button>
+    <button role="tab">Configuración</button>
+    <button role="tab">Privacidad</button>
+  </div>
+  
+  <div role="tabpanel">
+    <h3>Información personal</h3>
+    <p>Contenido de información...</p>
+  </div>
+  
+  <div role="tabpanel" hidden>
+    <h3>Configuración de cuenta</h3>
+    <p>Contenido de configuración...</p>
+  </div>
+  
+  <div role="tabpanel" hidden>
+    <h3>Configuración de privacidad</h3>
+    <p>Contenido de privacidad...</p>
+  </div>
+</accessible-component>
+
+<style>
+  [role="tablist"] {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  [role="tab"] {
+    padding: 10px 20px;
+    background: #f0f0f0;
+    border: none;
+    cursor: pointer;
+  }
+  
+  [role="tab"][aria-selected="true"] {
+    background: #3498db;
+    color: white;
+  }
+</style>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Carrusel Accesible</title>
+    <script src="../polyfill/accessible-component.js"></script>
+</head>
+<body>
+    <h1>Demo funcionando!</h1>
+    <a href="../index.html">← Volver al inicio</a>
+    
+    <accessible-component role="carousel">
+        <img src="https://via.placeholder.com/400x300?text=Producto+1" alt="Demo">
+        <img src="https://via.placeholder.com/400x300?text=Producto+2" alt="Demo">
+    </accessible-component>
+</body>
+</html>

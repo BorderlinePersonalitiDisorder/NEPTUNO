@@ -1,0 +1,144 @@
+@"
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acordeón Accesible</title>
+    <script src="../polyfill/accessible-component.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+            background-color: #f5f7fa;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #3498db;
+            text-decoration: none;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        
+        accessible-component[role="accordion"] {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        
+        .accordion-item {
+            border-bottom: 1px solid #eee;
+        }
+        
+        .accordion-header {
+            padding: 15px 20px;
+            background: #f8f9fa;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .accordion-header:hover {
+            background: #e9ecef;
+        }
+        
+        .accordion-content {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        
+        .accordion-item.active .accordion-content {
+            padding: 20px;
+            max-height: 500px;
+        }
+        
+        .accordion-icon {
+            transition: transform 0.3s ease;
+        }
+        
+        .accordion-item.active .accordion-icon {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-link">← Volver al inicio</a>
+        <h1>Demo de Acordeón Accesible</h1>
+        
+        <accessible-component role="accordion">
+            <div class="accordion-item">
+                <div class="accordion-header" role="button" aria-expanded="false">
+                    <span>¿Qué es un componente accesible?</span>
+                    <span class="accordion-icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <p>Un componente accesible es aquel diseñado para que todas las personas puedan usarlo, incluyendo aquellas con discapacidades visuales, motoras o auditivas.</p>
+                </div>
+            </div>
+            
+            <div class="accordion-item">
+                <div class="accordion-header" role="button" aria-expanded="false">
+                    <span>¿Por qué es importante?</span>
+                    <span class="accordion-icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <p>Porque permite que más de 1.3 mil millones de personas con discapacidades en el mundo puedan usar la web sin barreras.</p>
+                </div>
+            </div>
+            
+            <div class="accordion-item">
+                <div class="accordion-header" role="button" aria-expanded="false">
+                    <span>¿Cómo funciona este componente?</span>
+                    <span class="accordion-icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <p>Implementa automáticamente las mejores prácticas de accesibilidad, como navegación por teclado, semántica adecuada para lectores de pantalla y gestión de foco.</p>
+                </div>
+            </div>
+        </accessible-component>
+    </div>
+
+    <script>
+        document.querySelectorAll('.accordion-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const item = header.parentElement;
+                item.classList.toggle('active');
+                
+                const expanded = item.classList.contains('active');
+                header.setAttribute('aria-expanded', expanded);
+            });
+            
+            // Añadir soporte para teclado
+            header.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    header.click();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+"@ | Out-File -Encoding utf8 demos/accordion.html
