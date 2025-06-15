@@ -1,103 +1,45 @@
+// Dentro de _initComponent
+case 'tabs':
+    this._initTabs();
+    break;
 
-class AccessibleComponent extends HTMLElement {
-    constructor() {
-        super();
-        this.attachShadow({ mode: 'open' });
-        this.shadowRoot.innerHTML = `
-            <style>
-                :host {
-                    display: block;
-                    contain: content;
-                    position: relative;
-                }
-            </style>
-            <slot></slot>
-        `;
-        this._initComponent();
-    }
-
-    _initComponent() {
-        const role = this.getAttribute('role');
-        switch(role) {
-            case 'carousel':
-                this._initCarousel();
-                break;
-            case 'tabs':
-                this._initTabs();
-                break;
-            case 'modal':
-                this._initModal();
-                break;
-            case 'accordion':
-                this._initAccordion();
-                break;
-            default:
-                console.warn(`Rol no soportado: ${role}`);
-        }
-    }
-
-    _initCarousel() {
-        // Lógica accesible para carruseles
-        const items = this.querySelectorAll('img, section, div');
-        items.forEach((item, index) => {
-            item.setAttribute('role', 'tabpanel');
-            item.setAttribute('aria-label', `Ítem ${index + 1} de ${items.length}`);
-            item.tabIndex = 0;
+// Añadir este nuevo método
+_initTabs() {
+    const tablist = this.querySelector('[role="tablist"]');
+    const tabs = this.querySelectorAll('[role="tab"]');
+    const panels = this.querySelectorAll('[role="tabpanel"]');
+    
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            // Desactivar todos los tabs
+            tabs.forEach(t => t.setAttribute('aria-selected', 'false'));
+            panels.forEach(p => p.hidden = true);
+            
+            // Activar tab seleccionado
+            tab.setAttribute('aria-selected', 'true');
+            const panelId = tab.getAttribute('aria-controls');
+            const panel = panelId 
+                ? document.getElementById(panelId) 
+                : panels[Array.from(tabs).indexOf(tab)];
+            panel.hidden = false;
         });
         
-        console.log("Carrusel accesible inicializado");
-        
-        // Añadir controles de navegación
-        const prevButton = document.createElement('button');
-        prevButton.textContent = 'Anterior';
-        prevButton.setAttribute('aria-label', 'Elemento anterior');
-        prevButton.addEventListener('click', () => this._scrollCarousel(-1));
-        
-        const nextButton = document.createElement('button');
-        nextButton.textContent = 'Siguiente';
-        nextButton.setAttribute('aria-label', 'Elemento siguiente');
-        nextButton.addEventListener('click', () => this._scrollCarousel(1));
-        
-        this.shadowRoot.appendChild(prevButton);
-        this.shadowRoot.appendChild(nextButton);
-    }
-
-    _scrollCarousel(direction) {
-        // Lógica para desplazar el carrusel
-        const container = this.shadowRoot.querySelector('.carousel-container');
-        if (container) {
-            const scrollAmount = container.clientWidth * direction;
-            container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-        }
-    }
-
-    _initTabs() {
-        console.log("Pestañas accesibles inicializadas");
-        // Implementación básica de tabs
-        const tabs = this.querySelectorAll('[role="tab"]');
-        const panels = this.querySelectorAll('[role="tabpanel"]');
-        
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => this._activateTab(tab));
+        tab.addEventListener('keydown', e => {
+            // Navegación con teclado
+            if (['ArrowRight', 'ArrowLeft'].includes(e.key)) {
+                const currentIndex = Array.from(tabs).indexOf(tab);
+                const direction = e.key === 'ArrowRight' ? 1 : -1;
+                const newIndex = (currentIndex + direction + tabs.length) % tabs.length;
+                tabs[newIndex].click();
+                tabs[newIndex].focus();
+            }
         });
+    });
+    
+    // Activar primer tab
+    if (tabs.length > 0) {
+        tabs[0].click();
     }
-
-    _activateTab(selectedTab) {
-        // Lógica para activar pestaña
-    }
-
-    _initModal() {
-        console.log("Modal accesible inicializado");
-        this.setAttribute('aria-modal', 'true');
-        this.setAttribute('role', 'dialog');
-        this.setAttribute('aria-hidden', 'true');
-    }
-
-    _initAccordion() {
-        console.log("Acordeón accesible inicializado");
-        // Implementación básica de acordeón
-    }
+    
+    console.log("Componente de pestañas inicializado");
 }
-
-// Registrar el componente personalizado
-customElements.define('accessible-component', AccessibleComponent);
