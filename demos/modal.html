@@ -251,3 +251,24 @@
     </accessible-component>
 </body>
 </html>
+<script type="module">
+  import AccessibleComponent from '../accessible-component.js';
+  
+  // Inicializar en elementos específicos
+  document.addEventListener('DOMContentLoaded', () => {
+    const components = document.querySelectorAll('.accessible');
+    components.forEach(component => {
+      new AccessibleComponent(component);
+    });
+  });
+</script><script type="module">
+import AccessibleComponent from '../../accessible-component.js';
+
+document.querySelector('.modal').addEventListener('click', () => {
+  new AccessibleComponent({
+    element: '#miModal',
+    ariaRole: 'dialog',
+    keyboardNavigation: true
+  });
+});
+</script>
