@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modal Accesible - accessible-component</title>
+    <script src="../polyfill/accessible-component.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            background-color: #f5f7fa;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        
+        p {
+            margin-bottom: 30px;
+            color: #34495e;
+            font-size: 1.1rem;
+        }
+        
+        .btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-weight: bold;
+        }
+        
+        .btn:hover {
+            background: #2980b9;
+        }
+        
+        /* Estilos para el modal accesible */
+        accessible-component[role="modal"] {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        
+        accessible-component[role="modal"][aria-hidden="false"] {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            position: relative;
+        }
+        
+        .modal-header {
+            margin-bottom: 20px;
+        }
+        
+        .modal-title {
+            color: #2c3e50;
+            font-size: 1.8rem;
+        }
+        
+        .modal-body {
+            margin-bottom: 25px;
+            color: #34495e;
+            line-height: 1.7;
+        }
+        
+        .close-button {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #7f8c8d;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+        
+        .close-button:hover {
+            background: #f1f2f6;
+            color: #e74c3c;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .submit-btn {
+            background: #2ecc71;
+            width: 100%;
+            padding: 14px;
+            font-size: 1.1rem;
+        }
+        
+        .submit-btn:hover {
+            background: #27ae60;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Demo de Modal Accesible</h1>
+        <p>Este componente modal incluye todas las características de accesibilidad necesarias:</p>
+        
+        <button id="openModal" class="btn">Abrir Modal</button>
+    </div>
+
+    <accessible-component role="modal" id="myModal" aria-label="Formulario de contacto">
+        <div class="modal-content">
+            <button class="close-button" aria-label="Cerrar modal">&times;</button>
+            
+            <div class="modal-header">
+                <h2 class="modal-title">Contacto</h2>
+            </div>
+            
+            <div class="modal-body">
+                <p>¿Tienes preguntas o comentarios sobre nuestro proyecto? ¡Estamos aquí para ayudarte!</p>
+                
+                <div class="form-group">
+                    <label for="name">Nombre:</label>
+                    <input type="text" id="name" aria-required="true">
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Correo electrónico:</label>
+                    <input type="email" id="email" aria-required="true">
+                </div>
+                
+                <div class="form-group">
+                    <label for="message">Mensaje:</label>
+                    <textarea id="message" rows="4" aria-required="true"></textarea>
+                </div>
+            </div>
+            
+            <button class="btn submit-btn">Enviar mensaje</button>
+        </div>
+    </accessible-component>
+
+    <script>
+        const modal = document.getElementById('myModal');
+        const openButton = document.getElementById('openModal');
+        const closeButton = modal.querySelector('.close-button');
+        
+        // Abrir modal
+        openButton.addEventListener('click', () => {
+            modal.setAttribute('aria-hidden', 'false');
+            // Enfocar el primer elemento dentro del modal
+            modal.querySelector('input').focus();
+        });
+        
+        // Cerrar modal
+        closeButton.addEventListener('click', () => {
+            modal.setAttribute('aria-hidden', 'true');
+            // Regresar el foco al botón que abrió el modal
+            openButton.focus();
+        });
+        
+        // Cerrar con tecla ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') {
+                modal.setAttribute('aria-hidden', 'true');
+                openButton.focus();
+            }
+        });
+        
+        // Evitar que el clic fuera del contenido cierre el modal
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.setAttribute('aria-hidden', 'true');
+                openButton.focus();
+            }
+        });
+    </script>
+</body>
+</html>
