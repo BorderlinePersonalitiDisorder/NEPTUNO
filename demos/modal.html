@@ -272,3 +272,15 @@ document.querySelector('.modal').addEventListener('click', () => {
   });
 });
 </script>
+<!-- En demos/modal.html -->
+<script type="module">
+import AccessibleComponent from '../../accessible-component.js';
+
+document.addEventListener('DOMContentLoaded', () => {
+  new AccessibleComponent({
+    targetElement: '#modalEjemplo',
+    ariaRole: 'dialog',
+    keyboardNavigation: true
+  });
+});
+</script>

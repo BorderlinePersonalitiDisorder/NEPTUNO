@@ -1,43 +1,329 @@
 <!DOCTYPE html>
-<script src="../polyfill/accessible-component.js"></script>
-
-<accessible-component role="carousel" aria-label="Galería de productos">
-  <img src="https://via.placeholder.com/400x300?text=Producto+1" alt="Zapatos deportivos">
-  <img src="https://via.placeholder.com/400x300?text=Producto+2" alt="Mochila ergonómica">
-  <img src="https://via.placeholder.com/400x300?text=Producto+3" alt="Taza reutilizable">
-</accessible-component>
-
-<style>
-  accessible-component[role="carousel"] {
-    display: flex;
-    overflow-x: auto;
-    gap: 20px;
-    padding: 20px;
-    background: #f5f5f5;
-    scroll-snap-type: x mandatory;
-  }
-  
-  accessible-component[role="carousel"] img {
-    width: 300px;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 8px;
-    scroll-snap-align: start;
-  }
-</style>
-<!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>Carrusel Accesible</title>
-    <script src="../polyfill/accessible-component.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrusel Accesible - NEPTUNO</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #34495e;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+        
+        .subtitle {
+            color: var(--secondary-color);
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .swiper {
+            width: 100%;
+            height: 500px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 40px;
+        }
+        
+        .swiper-slide {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            background: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .slide-number {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: var(--secondary-color);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .product-image {
+            max-width: 300px;
+            height: auto;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .product-title {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        
+        .product-description {
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto 20px;
+            color: var(--dark-color);
+        }
+        
+        .product-price {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            margin-bottom: 25px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--secondary-color);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+        
+        .btn:hover {
+            background: var(--primary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .navigation-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 50px 0;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+        }
+        
+        .feature-title {
+            font-size: 1.4rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 30px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .swiper {
+                height: 400px;
+            }
+            
+            .product-title {
+                font-size: 1.5rem;
+            }
+            
+            .product-description {
+                font-size: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Demo funcionando!</h1>
-    <a href="../index.html">← Volver al inicio</a>
+    <div class="container">
+        <header>
+            <h1>Carrusel Accesible</h1>
+            <p class="subtitle">Implementación de un carrusel completamente accesible con navegación por teclado, soporte para lectores de pantalla y diseño responsivo.</p>
+        </header>
+        
+        <div class="swiper">
+            <div class="swiper-wrapper">
+                <!-- Slide 1 -->
+                <div class="swiper-slide" role="group" aria-label="Diapositiva 1 de 3">
+                    <span class="slide-number">1</span>
+                    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Zapatos deportivos de alta calidad" class="product-image">
+                    <h2 class="product-title">Zapatos Deportivos</h2>
+                    <p class="product-description">Zapatos de running con tecnología de amortiguación avanzada para máxima comodidad durante tus entrenamientos.</p>
+                    <div class="product-price">$89.99</div>
+                    <a href="#" class="btn">Ver detalles</a>
+                </div>
+                
+                <!-- Slide 2 -->
+                <div class="swiper-slide" role="group" aria-label="Diapositiva 2 de 3">
+                    <span class="slide-number">2</span>
+                    <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Mochila ergonómica para laptop" class="product-image">
+                    <h2 class="product-title">Mochila Ergonómica</h2>
+                    <p class="product-description">Mochila resistente con compartimento acolchado para laptop de hasta 17 pulgadas y diseño ergonómico para espalda.</p>
+                    <div class="product-price">$64.99</div>
+                    <a href="#" class="btn">Ver detalles</a>
+                </div>
+                
+                <!-- Slide 3 -->
+                <div class="swiper-slide" role="group" aria-label="Diapositiva 3 de 3">
+                    <span class="slide-number">3</span>
+                    <img src="https://images.unsplash.com/photo-1595341888016-a392ef81b7de?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Taza térmica reutilizable" class="product-image">
+                    <h2 class="product-title">Taza Reutilizable</h2>
+                    <p class="product-description">Taza térmica de acero inoxidable que mantiene tu bebida caliente hasta 8 horas y fría hasta 24 horas.</p>
+                    <div class="product-price">$24.99</div>
+                    <a href="#" class="btn">Ver detalles</a>
+                </div>
+            </div>
+            
+            <!-- Controles de navegación -->
+            <div class="swiper-pagination" aria-label="Navegación del carrusel"></div>
+            <div class="swiper-button-prev" aria-label="Diapositiva anterior"></div>
+            <div class="swiper-button-next" aria-label="Diapositiva siguiente"></div>
+        </div>
+        
+        <div class="navigation-buttons">
+            <a href="index.html" class="btn">Volver al inicio</a>
+            <a href="modal.html" class="btn">Ver Demo Modal</a>
+            <a href="tabs.html" class="btn">Ver Demo Tabs</a>
+        </div>
+        
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">♿</div>
+                <h3 class="feature-title">Totalmente Accesible</h3>
+                <p>Soporte completo para lectores de pantalla y navegación por teclado.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3 class="feature-title">Responsivo</h3>
+                <p>Se adapta perfectamente a dispositivos móviles, tablets y escritorio.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3 class="feature-title">Alto Rendimiento</h3>
+                <p>Código optimizado para máxima velocidad de carga y fluidez.</p>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Proyecto NEPTUNO - Componentes Web Accesibles</p>
+            <p>© 2025 - Todos los derechos reservados</p>
+        </footer>
+    </div>
     
-    <accessible-component role="carousel">
-        <img src="https://via.placeholder.com/400x300?text=Producto+1" alt="Demo">
-        <img src="https://via.placeholder.com/400x300?text=Producto+2" alt="Demo">
-    </accessible-component>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const swiper = new Swiper('.swiper', {
+                loop: true,
+                speed: 800,
+                autoplay: {
+                    delay: 5000,
+                    disableOnInteraction: false,
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                    renderBullet: function (index, className) {
+                        return '<span class="' + className + '" role="button" aria-label="Ir a la diapositiva ' + (index + 1) + '">' + (index + 1) + '</span>';
+                    },
+                },
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+                a11y: {
+                    enabled: true,
+                    prevSlideMessage: 'Diapositiva anterior',
+                    nextSlideMessage: 'Diapositiva siguiente',
+                    firstSlideMessage: 'Esta es la primera diapositiva',
+                    lastSlideMessage: 'Esta es la última diapositiva',
+                    paginationBulletMessage: 'Ir a la diapositiva {{index}}',
+                },
+                keyboard: {
+                    enabled: true,
+                    onlyInViewport: true,
+                },
+            });
+            
+            // Añadir eventos para mejorar accesibilidad
+            const slides = document.querySelectorAll('.swiper-slide');
+            slides.forEach((slide, index) => {
+                slide.setAttribute('tabindex', '0');
+                slide.setAttribute('aria-roledescription', 'diapositiva');
+                slide.setAttribute('data-swiper-slide-index', index);
+            });
+        });
+    </script>
 </body>
 </html>
